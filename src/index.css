@@ -1,0 +1,47 @@
+
+h1, h2 {
+	color: #0ab4ce;
+}
+hr {
+	border-top: 2px solid #0ab4ce;
+}
+.mainContainer {
+	width: 1000px;
+	min-width: 80%;
+	/*border: 1px solid;*/
+	margin: 0 auto;
+}
+.loginContainer{
+	margin: 0 auto;
+	width: 500px;
+}
+.tweetContainer {
+	float: left;
+	width: 500px;
+	margin: 0 20px;
+	/*border: 1px solid;*/
+}
+.userListContainer {
+	float: left;
+	width: 300px;
+	margin: 0 20px;
+}
+.tweetForm {
+	margin: 20px auto;
+	width: 300px;
+}
+#password {
+	margin-bottom: 20px;
+}
+.logout {
+	width: 100px;
+}
+.tweet {
+	margin: 5px 0;
+}
+
+.clearfix:after {
+  display: block;
+  clear: both;
+  content: "";
+}
