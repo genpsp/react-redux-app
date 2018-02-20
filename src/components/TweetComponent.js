@@ -11,14 +11,8 @@ export class TweetContainer extends React.Component{
     super(props);
     this.state = props.location.state;
     usersRef.set(this.state.users);
-    console.log('initialized');
   }
   componentDidMount(){
-    tweetsRef.on('value', (snapshot)　=> {
-      this.setState({
-        tweets: snapshot.val()
-      });
-    });
     usersRef.on('value', (snapshot)　=> {
       this.setState({
         users: snapshot.val()
@@ -30,14 +24,7 @@ export class TweetContainer extends React.Component{
     console.log('logout');
     firebase.auth().onAuthStateChanged( (user) => {
       if(user){
-        console.log('signin!');
-        this.props.history.push({
-          pathname: '/tweet',
-          state: {
-            tweets: [],
-            users: this.state.users
-          }
-        });
+
       }else{
         this.props.history.push('/');
       }
