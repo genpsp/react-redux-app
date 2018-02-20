@@ -1,11 +1,16 @@
-
-const Actions = {
-  addUser(value) {
+const userActions = {
+  initUser(users) {
+    return {
+      type: 'INIT_USER',
+      payload: users
+    }
+  },
+  addUser(payload) {
     return {
       type: 'ADD_USER',
-      value,
+      payload,
     }
   },
 }
 
-export default Actions
+export default userActions

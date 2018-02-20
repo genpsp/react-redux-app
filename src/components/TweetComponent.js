@@ -1,53 +1,49 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import firebase from 'firebase';
-import { firebaseRef, tweetsRef, usersRef } from '../firebase/index.js';
-import UserList from '../components/UserList.js';
-import TweetForm from '../components/TweetForm.js';
+import React from 'react'
+import firebase from 'firebase'
+import UserList from '../components/UserList.js'
+import TweetForm from '../components/TweetForm.js'
+import {connect} from "react-redux"
+import {tweetsRef} from "../firebase";
 
 // メインツイート画面
-export class TweetContainer extends React.Component{
-  constructor(props) {
-    super(props);
-    this.state = props.location.state;
-    usersRef.set(this.state.users);
-  }
-  componentDidMount(){
-    usersRef.on('value', (snapshot)　=> {
-      this.setState({
-        users: snapshot.val()
-      });
-    });
-  }
-  _onClickLogOut(){
-    firebase.auth().signOut();
-    console.log('logout');
-    firebase.auth().onAuthStateChanged( (user) => {
-      if(user){
-
-      }else{
-        this.props.history.push('/');
+export class TweetComponent extends React.Component {
+  _onClickLogOut() {
+    firebase.auth().signOut()
+    console.log('logout')
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+      } else {
+        tweetsRef.set(this.props.state.tweetReducer.tweets)
+        this.props.history.push('/')
       }
-    });
+    })
   }
-  render(){
-    var tweetItems = this.state.tweets.map((tweet) => {
+
+  render() {
+    let {tweetReducer, userReducer} = this.props.state
+    console.log(this.props.state)
+    let tweetItems = tweetReducer.tweets.map((tweet) => {
       return (
-        <TweetItem tweet={tweet} />
-      );
-    });
-    var userList = this.state.users.map((user) => {
-      return (
-        <UserList user={user} />
-      );
-    });
-    return(
+        <TweetItem tweet={tweet}/>
+      )
+    })
+    let userList = []
+    if (userReducer.users) {
+      userList = userReducer.users.map((user) => {
+        return (
+          <UserList user={user}/>
+        )
+      })
+    }
+
+    return (
       <div className='mainContainer clearfix'>
         <div className='tweetContainer'>
-          <h1>Tweet Room</h1><hr />
+          <h1>Tweet Room</h1>
+          <hr/>
           {tweetItems}
-          <hr />
-          <TweetForm tweet={this.state.tweets}/>
+          <hr/>
+          <TweetForm tweet={tweetReducer.tweets}/>
           <button className='logout' onClick={this._onClickLogOut.bind(this)}>logout</button>
         </div>
         <div className='userListContainer'>
@@ -55,20 +51,32 @@ export class TweetContainer extends React.Component{
           {userList}
         </div>
       </div>
-    );
+    )
   }
 }
 
 //ツイートアイテム
-class TweetItem extends React.Component{
+class TweetItem extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
-  render(){
-    return(
+
+  render() {
+    return (
       <div className='tweetItem'>
         <div className='tweet'>{this.props.tweet.userName}> {this.props.tweet.text}</div>
       </div>
-    );
+    )
   }
 }
+
+//connect
+export const mapStateToProps = (state) => {
+  return {
+    state: state
+  }
+}
+export const mapDispatchToProps = (dispatch) => {
+  return {}
+}
+export default connect(mapStateToProps, mapDispatchToProps)(TweetComponent)

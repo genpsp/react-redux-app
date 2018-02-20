@@ -1,30 +1,47 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import firebase from 'firebase';
-import {tweetsRef} from '../firebase/index.js';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import firebase from 'firebase'
+import {tweetsRef} from '../firebase/index.js'
+import tweetActions from '../actions/tweetAction.js'
+import userActions from '../actions/userAction.js'
+import {connect} from 'react-redux'
 
 //送信フォーム
-class TweetForm extends React.Component{
-  constructor(props) {
-    super(props);
-    this._onClick = this._onClick.bind(this);
+class TweetForm extends React.Component {
+  _onClick() {
+    this.props.handleTweetAdd({
+      text: ReactDOM.findDOMNode(this.refs.inputValue).value,
+      userName: firebase.auth().currentUser.displayName,
+    })
+    ReactDOM.findDOMNode(this.refs.inputValue).value = ''
   }
-  _onClick(e){
-      this.props.tweet.push({
-        userName: firebase.auth().currentUser.displayName,
-        text: ReactDOM.findDOMNode(this.refs.inputValue).value
-      });
-      tweetsRef.set(this.props.tweet);
-      ReactDOM.findDOMNode(this.refs.inputValue).value　='';
-  }
-  render(){
-    return(
+
+  render() {
+    return (
       <div className='tweetForm'>
-        <input ref='inputValue' type='text' placeholder='message...' />
-        <input type='button' value='送信' onClick={this._onClick.bind(this)}/>
+        <input ref='inputValue' type='text' placeholder='message...'/>
+        <input type='button' value='送信' onClick={() => {
+          this._onClick()
+        }}/>
       </div>
-    );
+    )
   }
 }
 
-export default TweetForm
+//connect
+export const mapStateToProps = (state) => {
+  return {
+    state: state
+  }
+}
+export const mapDispatchToProps = (dispatch) => {
+  return {
+    handleUserAdd(payload) {
+      dispatch(userActions.addUser(payload))
+    },
+    handleTweetAdd(payload) {
+      dispatch(tweetActions.addTweet(payload))
+    },
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(TweetForm)

@@ -1,11 +1,16 @@
-
-const Actions = {
-  addTweet(value) {
+const tweetActions = {
+  initTweet(tweets) {
+    return {
+      type: 'INIT_TWEET',
+      payload: tweets
+    }
+  },
+  addTweet(tweet) {
     return {
       type: 'ADD_TWEET',
-      value,
+      payload: tweet
     }
   },
 }
 
-export default Actions
+export default tweetActions

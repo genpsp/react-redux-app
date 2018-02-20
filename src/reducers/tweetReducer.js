@@ -1,19 +1,25 @@
-
 const initialState = {
   tweets: [],
 }
 
-const reducer = (state = initialState, action) => {
+const tweetReducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'INIT_TWEET': {
+      return {
+        ...state,
+        tweets: action.payload,
+      }
+    }
     case 'ADD_TWEET': {
       return {
-        twees: state.tweets.concat(action.value)
+        ...state,
+        tweets: state.tweets.concat([action.payload])
       }
     }
     default: {
-      return state;
+      return state
     }
   }
 }
 
-export default reducer
+export default tweetReducer
