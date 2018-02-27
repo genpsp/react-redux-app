@@ -10,12 +10,12 @@ class LoginComponent extends React.Component {
   componentDidMount() {
     firebase.auth().signOut()
     //DBからデータ読み込み
-    usersRef.once('value', (snapshot) => {
+    usersRef.on('value', (snapshot) => {
       if (snapshot.val()) {
         this.props.initUser(snapshot.val())
       }
     })
-    tweetsRef.once('value', (snapshot) => {
+    tweetsRef.on('value', (snapshot) => {
       if (snapshot.val()) {
         this.props.initTweet(snapshot.val())
       }
@@ -34,7 +34,6 @@ class LoginComponent extends React.Component {
     })
   }
 
-
   //ユーザー登録
   _onClickSignUp() {
     let email = document.getElementById('email').value
@@ -50,7 +49,7 @@ class LoginComponent extends React.Component {
       return user.updateProfile({
         displayName: document.getElementById('userName').value
       })
-    }).catch(function (error) {
+    }).catch((error) => {
       alert(error)
     })
   }
@@ -63,7 +62,7 @@ class LoginComponent extends React.Component {
 
     firebase.auth().signInWithEmailAndPassword(email, password).then((user) => {
       console.log('login')
-    }).catch(function (error) {
+    }).catch((error) => {
       alert(error)
     })
   }
@@ -78,11 +77,15 @@ class LoginComponent extends React.Component {
         pass: <input id='password' type='password' placeholder='password'/><br/>
         <button type="button" onClick={() => {
           this._onClickLogin()
-        }}>login
+        }}>
+          login
         </button>
-        or <button type="button" onClick={() => {
-        this._onClickSignUp()
-      }}>sign-up</button>
+        or
+        <button type="button" onClick={() => {
+          this._onClickSignUp()
+        }}>
+          sign-up
+        </button>
       </div>
     )
   }
